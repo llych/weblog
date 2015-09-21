@@ -1,0 +1,92 @@
+
+<link href="static/css/bootstrap.min.css" rel="stylesheet">
+<link href="static/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+<script src="static/js/jquery-1.10.2.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+<script src="static/js/bootstrap-datetimepicker.js"></script>
+<script src="static/js/bootstrap-datetimepicker.fr.js"></script>
+
+<div class="wrapper">
+    <div class="row">
+    <div class="col-md-2"></div>
+        <form class="form-inline" onsubmit="">
+          <div class="form-group">
+            <label class="sr-only" for="exampleInputEmail3">Email address</label>
+            <input type="text" id="ip" class="form-control"  placeholder="ip">
+          </div>
+          <div class="form-group">
+            <label class="sr-only" for="exampleInputPassword3">Password</label>
+            <input type="text" id="logfile" class="form-control" placeholder="log文件,如 mi.log">
+          </div>
+          <div class="form-group">
+            <label class="sr-only" for="exampleInputPassword3">Password</label>
+            <input type="text" id="filter" class="form-control" placeholder="过滤关键字,如 error">
+          </div>
+<!--           <div class="checkbox">
+            <label>
+              <input type="checkbox"> Remember me
+            </label>
+          </div> -->
+          <button type="button" id="start" class="btn btn-default">获取日志</button>
+          <button type="button" id="stop" class="btn btn-default">停止</button>
+          <button type="button" id="clean" class="btn btn-default">清空</button>
+        </form>
+          
+    </div>
+    <div class="row" style="overflow-y:hidden;overflow-x:hidden">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-8">
+            <font size="2px">
+                <div id="out" style="width: 900px; height: 400px;border: 1px #ccc solid; overflow-y: scroll;float: left;"></div>
+            </font>
+        </div>
+    </div>
+</div>
+
+<script>
+            
+            var t = false;
+            function sse(ip,logfile,filter) {
+                var source = new EventSource('/stream/'+ip+'/'+logfile+'/'+filter);
+                // var out = document.getElementById('out');
+                source.onmessage = function(e) {
+                    // XSS in chat is fun
+                    if(t){
+                        source.close();
+                        return ;
+                    };
+                    // out.innerHTML =  e.data + '\\n' + out.innerHTML;
+                    $("#out").append(e.data+'</br>');
+                    $('#out').scrollTop( $('#out')[0].scrollHeight );
+
+                };
+            }
+            $('#in').keyup(function(e){
+                if (e.keyCode == 13) {
+                    $.post('/post', {'message': $(this).val()});
+                    $(this).val('');
+                }
+            });
+            
+            
+            
+            $('#stop').click(function(){
+              // action goes here!!
+              t = true;
+            });
+            $('#start').click(function(){
+              // action goes here!!
+              logfile=$("#logfile").val();
+              ip=$("#ip").val();
+              filter=$("#filter").val();
+              t = false;
+              console.log(logfile);
+              sse(ip,logfile,filter);
+            });
+            $('#clean').click(function(){
+              $("#out").html("");
+              
+            });
+</script>
+
