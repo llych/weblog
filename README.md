@@ -10,3 +10,18 @@ api错误统计 /实时日志 web显示
     实时日志设计: 
       无需登录服务器,web 使用 Server-Sent Events(SSE)保持长连接,实时输出日志
       方便快速查询日志
+### 基本流程<br /> 
+![image](https://github.com/llych/weblog/blob/master/screenshots/3.png)
+
+### web实时日志,支持关键字红色标记<br /> 
+![image](https://github.com/llych/weblog/blob/master/screenshots/4.png)
+
+### 统计折线图<br /> 
+![image](https://github.com/llych/weblog/blob/master/screenshots/5.png)
+
+### 日志查询<br /> 
+![image](https://github.com/llych/weblog/blob/master/screenshots/1.png)
+![image](https://github.com/llych/weblog/blob/master/screenshots/2.png)
+
+
+
